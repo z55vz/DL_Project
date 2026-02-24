@@ -1,218 +1,140 @@
-# DL_Project  
-## Context-Aware Revenue Optimization in Food Delivery Platforms  
-### Using Deep Learning and Stochastic Demand Simulation  
+# 🚚 Context-Aware Revenue Optimization  
+### Dynamic Pricing for Food Delivery Using Deep Learning
 
-**By Abdulrahman Jaber Ageeli – February 2026**
-
----
-
-## 📌 Project Overview
-
-Food delivery platforms operate in highly dynamic environments where customer demand depends on contextual factors such as distance, time of day, and weather conditions. Static pricing policies ignore this variability and may result in suboptimal revenue outcomes.
-
-This project develops a **context-aware revenue optimization framework** that integrates:
-
-- Stochastic demand simulation  
-- Economically consistent price sensitivity modeling  
-- Logistic Regression (baseline)  
-- Deep Neural Networks (nonlinear modeling)  
-
-The objective is to estimate the probability of order acceptance under varying prices and determine the **revenue-maximizing delivery fee**.
-
-Unlike purely predictive models trained on fixed historical labels, this project constructs a controlled demand simulator that embeds economic structure and nonlinear contextual effects.
+**Abdulrahman Jaber Ageeli**  
+February 2026  
 
 ---
 
-## 📊 Dataset
+## 📌 Overview
 
-We use the Kaggle DoorDash dataset:
+This project builds a **context-aware dynamic pricing system** for food delivery platforms.
 
-`historical_data.csv`
+Instead of using static delivery fees, we simulate customer behavior under different pricing scenarios and train machine learning models to:
 
-Selected variables:
+- Predict order acceptance probability  
+- Model nonlinear price sensitivity  
+- Identify revenue-maximizing delivery prices  
 
-- `created_at`  
-- `estimated_store_to_consumer_driving_duration`  
-
-These variables are transformed into structured contextual features.
-
----
-
-## ⚙️ Methodology
-
-### 1️⃣ Feature Engineering
-
-#### Distance Estimation
-
-Driving duration is converted into distance (km):
-
-$$
-\text{distance} = \frac{\text{duration}_{\text{seconds}}}{3600} \times 40
-$$
-
-where 40 km/h is assumed as average urban driving speed.
+The result is a fully reproducible pricing optimization pipeline combining economic structure with deep learning.
 
 ---
 
-#### Peak Hour Indicator
+## 💡 Business Problem
 
-Peak periods are defined as:
+Delivery platforms face a trade-off:
 
-- Lunch: 11:00–14:00  
-- Dinner: 18:00–21:00  
+- Higher prices → higher margin  
+- Higher prices → lower acceptance rate  
 
-A binary variable `is_peak` is created.
+The goal is to find the optimal balance:
 
----
+\[
+\text{Revenue} = \text{price} \times P(\text{accept})
+\]
 
-#### Weather Simulation
-
-Since weather is not available, rain probability is simulated conditionally:
-
-$$
-P(\mathrm{rain}) = 0.2 + 0.1 \times \mathrm{is\_peak}
-$$
-
-This increases contextual variability during high-demand periods.
+We estimate \( P(\text{accept}) \) using contextual features and machine learning.
 
 ---
 
-### 2️⃣ Dynamic Base Pricing Model
+## 🧩 Key Features
 
-Instead of using a fixed delivery fee:
+### Context-Aware Demand Modeling
+Customer price sensitivity varies with:
 
-$$
-P_{\text{base}} = 8 + 0.8 \times \text{distance}
-$$
+- Distance  
+- Peak hours  
+- Weather conditions  
 
-This captures:
-- Fixed operational cost (8)
-- Distance-based marginal cost
+We simulate nonlinear elasticity using:
 
----
-
-### 3️⃣ Data Leakage Prevention
-
-To ensure methodological rigor:
-
-- Train/test split is performed **before counterfactual price expansion**
-- Each order context belongs exclusively to one split
-- Price perturbations are generated separately within each split
-
-This prevents the same order context from appearing in both training and testing data under different prices.
-
----
-
-### 4️⃣ Stochastic Demand Simulation
-
-For each order, 10 counterfactual prices are generated:
-
-$$
-\text{price} = P_{\text{base}} + \delta
-$$
-
-where
-
-$$
-\delta \sim \mathcal{U}\left(-0.5 P_{\text{base}}, +0.5 P_{\text{base}}\right)
-$$
-
-Minimum price is constrained to \$2.
-
----
-
-### Nonlinear Price Sensitivity
-
-Price elasticity varies with context:
-
-$$
+\[
 \alpha(X) =
 0.15
 + 0.05 \cdot \text{distance}
 + 0.02 \cdot \text{distance}^2
 + 0.08 \cdot (\text{distance} \times \text{is\_rainy})
 - 0.07 \cdot \text{is\_peak}
-$$
-
-This introduces:
-
-- Quadratic distance effects  
-- Distance–weather interaction  
-- Reduced elasticity during peak hours  
+\]
 
 ---
 
-### Acceptance Probability
+### Stochastic Demand Simulation
 
-First compute:
+For each order, multiple counterfactual prices are generated:
 
-$$
-z = -\alpha(X)\left(\text{price} - P_{\text{base}}\right) + \epsilon
-$$
+\[
+\text{price} = P_{\text{base}} + \delta
+\]
 
-Then acceptance probability:
+\[
+\delta \sim \mathcal{U}(-0.5P_{\text{base}}, +0.5P_{\text{base}})
+\]
 
-$$
-P(\text{accept}) = \sigma(z)
-$$
+Acceptance probability:
 
-where
+\[
+P(\text{accept}) = \sigma\left(-\alpha(X)(\text{price} - P_{\text{base}}) + \epsilon \right)
+\]
 
-$$
-\epsilon \sim \mathcal{N}(0, 0.5)
-$$
-
-and $\sigma(\cdot)$ denotes the sigmoid function.
-
-The final acceptance label is drawn stochastically from this probability, producing a nonlinear decision surface.
+This produces a realistic nonlinear demand surface.
 
 ---
 
 ## 🤖 Models
 
-### Logistic Regression
+### 1️⃣ Logistic Regression (Baseline)
 - Linear decision boundary  
-- Baseline model  
+- Fast and interpretable  
 
-### Deep Neural Network
-
-Architecture:
-- 64 → 32 → 16 hidden units  
+### 2️⃣ Deep Neural Network
+- Architecture: 64 → 32 → 16  
 - ReLU activations  
 - Dropout (0.2)  
 - Early stopping  
 
-The DNN captures nonlinear interactions embedded in $\alpha(X)$.
+The DNN captures nonlinear interactions embedded in contextual elasticity.
 
 ---
 
-## 📈 Evaluation Metrics
-
-- **ROC-AUC** (classification performance)  
-- **Brier Score** (probability calibration)  
-- **Revenue Optimization Curve**  
-
-Expected revenue:
-
-$$
-\text{Revenue} = \text{price} \times P(\text{accept})
-$$
-
----
-
-## 🧠 Results
+## 📊 Results
 
 | Model | AUC | Brier Score |
 |-------|------|------------|
 | Logistic Regression | ~0.945 | ~0.091 |
 | Deep Neural Network | ~0.957 | ~0.084 |
 
-Key Findings:
+### Key Takeaways
 
-- DNN outperforms Logistic Regression in both discrimination and calibration.
-- Nonlinear contextual effects improve predictive performance.
-- Revenue optimization curve identifies a clear revenue-maximizing price.
-- No signs of severe overfitting observed.
+- DNN improves predictive performance
+- Nonlinear modeling increases revenue optimization accuracy
+- Revenue curve identifies a clear optimal price
+- No major overfitting observed
+
+---
+
+## 🛠 Engineering Highlights
+
+- Proper train/test split before price expansion (no leakage)
+- Reproducible stochastic simulation
+- Revenue-driven evaluation (not just classification metrics)
+- Clean modular pipeline
+
+---
+
+## 📁 Dataset
+
+Source: Kaggle DoorDash dataset  
+File required:
+
+Used features:
+- Order timestamp  
+- Driving duration  
+
+Derived features:
+- Distance  
+- Peak indicator  
+- Simulated weather  
 
 ---
 
@@ -222,3 +144,4 @@ Key Findings:
 
 ```bash
 pip install numpy pandas scikit-learn matplotlib seaborn tensorflow
+DL_Project.ipynb
