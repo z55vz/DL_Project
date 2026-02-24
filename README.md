@@ -89,4 +89,4 @@ The Deep Neural Network outperformed Logistic Regression in both:
 ---
 
 ## 👨‍💻 Author
-Student – Graduation Project 2026
+Student – Abdulrahman Jaber Ageeli Introduction to Deep Learning Project
