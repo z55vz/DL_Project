@@ -70,7 +70,7 @@ A binary variable `is_peak` is created.
 Since weather is not available, rain probability is simulated conditionally:
 
 $$
-P(\text{rain}) = 0.2 + 0.1 \times \text{is\_peak}
+P(\mathrm{rain}) = 0.2 + 0.1 \times \mathrm{is\_peak}
 $$
 
 This increases contextual variability during high-demand periods.
