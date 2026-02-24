@@ -2,91 +2,243 @@
 ## Context-Aware Revenue Optimization in Food Delivery Platforms  
 ### Using Deep Learning and Stochastic Demand Simulation  
 
-**By Student – June 2026**
+**By Abdulrahman Jaber Ageeli – February 2026**
 
 ---
 
 ## 📌 Project Overview
-Food delivery platforms operate in highly dynamic environments where demand depends on context such as distance, time, and weather.
 
-This project proposes a **context-aware revenue optimization framework** that combines:
+Food delivery platforms operate in highly dynamic environments where customer demand depends on contextual factors such as distance, time of day, and weather conditions. Static pricing policies ignore this variability and may result in suboptimal revenue outcomes.
+
+This project develops a **context-aware revenue optimization framework** that integrates:
 
 - Stochastic demand simulation  
-- Machine learning models  
-- Deep neural networks for nonlinear pricing behavior  
+- Economically consistent price sensitivity modeling  
+- Logistic Regression (baseline)  
+- Deep Neural Networks (nonlinear modeling)  
 
-The goal is to estimate order acceptance probability and find the revenue-maximizing delivery price.
+The objective is to estimate the probability of order acceptance under varying prices and determine the **revenue-maximizing delivery fee**.
+
+Unlike purely predictive models trained on fixed historical labels, this project constructs a controlled demand simulator that embeds economic structure and nonlinear contextual effects.
 
 ---
 
 ## 📊 Dataset
+
 We use the Kaggle DoorDash dataset:
 
 `historical_data.csv`
 
-Key variables:
-- Order timestamp  
-- Store-to-consumer duration  
-- Derived contextual features  
+Selected variables:
+
+- `created_at`  
+- `estimated_store_to_consumer_driving_duration`  
+
+These variables are transformed into structured contextual features.
 
 ---
 
 ## ⚙️ Methodology
 
-### Feature Engineering
-- Distance estimation from driving duration  
-- Peak hour indicator  
-- Simulated weather conditions  
+### 1️⃣ Feature Engineering
 
-### Pricing Model
-Base price:
+#### Distance Estimation
 
+Driving duration is converted into distance (km):
 
-### Demand Simulation
-- Counterfactual price generation  
-- Nonlinear contextual sensitivity  
-- Logistic acceptance model  
+\[
+distance = \frac{duration_{seconds}}{3600} \times 40
+\]
 
-### Models Used
-- Logistic Regression (baseline)  
-- Deep Neural Network (64 → 32 → 16, Dropout, Early Stopping)
+where 40 km/h is assumed as average urban driving speed.
+
+---
+
+#### Peak Hour Indicator
+
+Peak periods are defined as:
+
+- Lunch: 11:00–14:00  
+- Dinner: 18:00–21:00  
+
+A binary variable `is_peak` is created.
+
+---
+
+#### Weather Simulation
+
+Since weather is not available, rain probability is simulated conditionally:
+
+\[
+P(rain) = 0.2 + 0.1 \times is\_peak
+\]
+
+This increases contextual variability during high-demand periods.
+
+---
+
+### 2️⃣ Dynamic Base Pricing Model
+
+Instead of using a fixed delivery fee:
+
+\[
+P_{base} = 8 + 0.8 \times distance
+\]
+
+This captures:
+- Fixed operational cost (8)
+- Distance-based marginal cost
+
+---
+
+### 3️⃣ Data Leakage Prevention
+
+To ensure methodological rigor:
+
+- Train/test split is performed **before counterfactual price expansion**
+- Each order context belongs exclusively to one split
+- Price perturbations are generated separately within each split
+
+This prevents the same order context from appearing in both training and testing data under different prices.
+
+---
+
+### 4️⃣ Stochastic Demand Simulation
+
+For each order, 10 counterfactual prices are generated:
+
+\[
+price = P_{base} + \delta
+\]
+
+\[
+\delta \sim U(-0.5P_{base}, +0.5P_{base})
+\]
+
+Minimum price is constrained to \$2.
+
+---
+
+### Nonlinear Price Sensitivity
+
+Price elasticity varies with context:
+
+\[
+\alpha(X) =
+0.15
++ 0.05 \cdot distance
++ 0.02 \cdot distance^2
++ 0.08 \cdot (distance \times is\_rainy)
+- 0.07 \cdot is\_peak
+\]
+
+This introduces:
+
+- Quadratic distance effects  
+- Distance–weather interaction  
+- Reduced elasticity during peak hours  
+
+---
+
+### Acceptance Probability
+
+\[
+z = -\alpha(X)(price - P_{base}) + \epsilon
+\]
+
+\[
+P(accept) = \sigma(z)
+\]
+
+where:
+
+\[
+\epsilon \sim N(0, 0.5)
+\]
+
+The final acceptance label is drawn stochastically from this probability, producing a nonlinear decision surface.
+
+---
+
+## 🤖 Models
+
+### Logistic Regression
+- Linear decision boundary  
+- Baseline model  
+
+### Deep Neural Network
+Architecture:
+- 64 → 32 → 16 hidden units  
+- ReLU activations  
+- Dropout (0.2)  
+- Early stopping  
+
+The DNN captures nonlinear interactions embedded in \( \alpha(X) \).
 
 ---
 
 ## 📈 Evaluation Metrics
-- ROC-AUC  
-- Brier Score  
-- Revenue optimization curve  
+
+- **ROC-AUC** (classification performance)  
+- **Brier Score** (probability calibration)  
+- **Revenue Optimization Curve**  
+
+Expected revenue:
+
+\[
+Revenue = price \times P(accept)
+\]
 
 ---
 
 ## 🧠 Results
-The Deep Neural Network outperformed Logistic Regression in both:
 
-- Predictive accuracy  
-- Revenue optimization performance  
+| Model | AUC | Brier Score |
+|-------|------|------------|
+| Logistic Regression | ~0.945 | ~0.091 |
+| Deep Neural Network | ~0.957 | ~0.084 |
+
+Key Findings:
+
+- DNN outperforms Logistic Regression in both discrimination and calibration.
+- Nonlinear contextual effects improve predictive performance.
+- Revenue optimization curve identifies a clear revenue-maximizing price.
+- No signs of severe overfitting observed.
 
 ---
 
 ## 🚀 How to Run
 
-1. Install dependencies
+### 1️⃣ Install Dependencies
 
+    pip install numpy pandas scikit-learn matplotlib seaborn tensorflow
 
-2. Open notebook
+### 2️⃣ Place Dataset
 
+Download `historical_data.csv` from Kaggle and place it in the project root directory.
 
-3. Run all cells
+### 3️⃣ Run Notebook
+
+Open:
+
+    DL_Project.ipynb
+
+Run all cells sequentially.
+
+---
+
+## 🔬 Key Contributions
+
+- Economically structured stochastic demand simulator  
+- Explicit leakage prevention strategy  
+- Nonlinear contextual elasticity modeling  
+- Revenue-driven model evaluation  
 
 ---
 
 ## 📚 References
-- Bishop (2006) – Pattern Recognition and Machine Learning  
-- Goodfellow et al. (2016) – Deep Learning  
-- Friedman et al. (2001) – Elements of Statistical Learning  
-- McFadden (1974) – Conditional Logit Model  
 
----
-
-## 👨‍💻 Author
-Student – Abdulrahman Jaber Ageeli Introduction to Deep Learning Project
+- Bishop, C. M. (2006). *Pattern Recognition and Machine Learning*. Springer.  
+- Goodfellow, I., Bengio, Y., & Courville, A. (2016). *Deep Learning*. MIT Press.  
+- Friedman, J., Hastie, T., & Tibshirani, R. (2001). *The Elements of Statistical Learning*. Springer.  
+- McFadden, D. (1974). *Conditional Logit Analysis of Qualitative Choice Behavior*.  
