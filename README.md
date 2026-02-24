@@ -46,9 +46,9 @@ These variables are transformed into structured contextual features.
 
 Driving duration is converted into distance (km):
 
-\[
-distance = \frac{duration_{seconds}}{3600} \times 40
-\]
+$$
+\text{distance} = \frac{\text{duration}_{\text{seconds}}}{3600} \times 40
+$$
 
 where 40 km/h is assumed as average urban driving speed.
 
@@ -69,9 +69,9 @@ A binary variable `is_peak` is created.
 
 Since weather is not available, rain probability is simulated conditionally:
 
-\[
-P(rain) = 0.2 + 0.1 \times is\_peak
-\]
+$$
+P(\text{rain}) = 0.2 + 0.1 \times \text{is\_peak}
+$$
 
 This increases contextual variability during high-demand periods.
 
@@ -81,9 +81,9 @@ This increases contextual variability during high-demand periods.
 
 Instead of using a fixed delivery fee:
 
-\[
-P_{base} = 8 + 0.8 \times distance
-\]
+$$
+P_{\text{base}} = 8 + 0.8 \times \text{distance}
+$$
 
 This captures:
 - Fixed operational cost (8)
@@ -107,13 +107,15 @@ This prevents the same order context from appearing in both training and testing
 
 For each order, 10 counterfactual prices are generated:
 
-\[
-price = P_{base} + \delta
-\]
+$$
+\text{price} = P_{\text{base}} + \delta
+$$
 
-\[
-\delta \sim U(-0.5P_{base}, +0.5P_{base})
-\]
+where
+
+$$
+\delta \sim \mathcal{U}\left(-0.5 P_{\text{base}}, +0.5 P_{\text{base}}\right)
+$$
 
 Minimum price is constrained to \$2.
 
@@ -123,14 +125,14 @@ Minimum price is constrained to \$2.
 
 Price elasticity varies with context:
 
-\[
+$$
 \alpha(X) =
 0.15
-+ 0.05 \cdot distance
-+ 0.02 \cdot distance^2
-+ 0.08 \cdot (distance \times is\_rainy)
-- 0.07 \cdot is\_peak
-\]
++ 0.05 \cdot \text{distance}
++ 0.02 \cdot \text{distance}^2
++ 0.08 \cdot (\text{distance} \times \text{is\_rainy})
+- 0.07 \cdot \text{is\_peak}
+$$
 
 This introduces:
 
@@ -142,19 +144,25 @@ This introduces:
 
 ### Acceptance Probability
 
-\[
-z = -\alpha(X)(price - P_{base}) + \epsilon
-\]
+First compute:
 
-\[
-P(accept) = \sigma(z)
-\]
+$$
+z = -\alpha(X)\left(\text{price} - P_{\text{base}}\right) + \epsilon
+$$
 
-where:
+Then acceptance probability:
 
-\[
-\epsilon \sim N(0, 0.5)
-\]
+$$
+P(\text{accept}) = \sigma(z)
+$$
+
+where
+
+$$
+\epsilon \sim \mathcal{N}(0, 0.5)
+$$
+
+and $\sigma(\cdot)$ denotes the sigmoid function.
 
 The final acceptance label is drawn stochastically from this probability, producing a nonlinear decision surface.
 
@@ -167,13 +175,14 @@ The final acceptance label is drawn stochastically from this probability, produc
 - Baseline model  
 
 ### Deep Neural Network
+
 Architecture:
 - 64 → 32 → 16 hidden units  
 - ReLU activations  
 - Dropout (0.2)  
 - Early stopping  
 
-The DNN captures nonlinear interactions embedded in \( \alpha(X) \).
+The DNN captures nonlinear interactions embedded in $\alpha(X)$.
 
 ---
 
@@ -185,9 +194,9 @@ The DNN captures nonlinear interactions embedded in \( \alpha(X) \).
 
 Expected revenue:
 
-\[
-Revenue = price \times P(accept)
-\]
+$$
+\text{Revenue} = \text{price} \times P(\text{accept})
+$$
 
 ---
 
@@ -211,34 +220,5 @@ Key Findings:
 
 ### 1️⃣ Install Dependencies
 
-    pip install numpy pandas scikit-learn matplotlib seaborn tensorflow
-
-### 2️⃣ Place Dataset
-
-Download `historical_data.csv` from Kaggle and place it in the project root directory.
-
-### 3️⃣ Run Notebook
-
-Open:
-
-    DL_Project.ipynb
-
-Run all cells sequentially.
-
----
-
-## 🔬 Key Contributions
-
-- Economically structured stochastic demand simulator  
-- Explicit leakage prevention strategy  
-- Nonlinear contextual elasticity modeling  
-- Revenue-driven model evaluation  
-
----
-
-## 📚 References
-
-- Bishop, C. M. (2006). *Pattern Recognition and Machine Learning*. Springer.  
-- Goodfellow, I., Bengio, Y., & Courville, A. (2016). *Deep Learning*. MIT Press.  
-- Friedman, J., Hastie, T., & Tibshirani, R. (2001). *The Elements of Statistical Learning*. Springer.  
-- McFadden, D. (1974). *Conditional Logit Analysis of Qualitative Choice Behavior*.  
+```bash
+pip install numpy pandas scikit-learn matplotlib seaborn tensorflow
