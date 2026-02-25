@@ -1,4 +1,4 @@
-# 🚚 Context-Aware Revenue Optimization  
+# Context-Aware Revenue Optimization  
 ### Dynamic Pricing for Food Delivery Using Deep Learning  
 
 **Abdulrahman Jaber Ageeli**  
@@ -73,4 +73,4 @@ To estimate $P(accept)$, we combine contextual feature engineering with nonlinea
 Then include:
 
 ```markdown
-![ROC Curve]("ROC.png")
+![ROC Curve](ROC.png)
