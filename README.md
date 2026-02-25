@@ -16,7 +16,7 @@ Instead of using static delivery fees, we simulate customer behavior under diffe
 - Model nonlinear price sensitivity  
 - Identify revenue-maximizing delivery prices  
 
-The result is a fully reproducible pricing optimization pipeline combining economic structure with deep learning.
+The result is a reproducible pricing optimization pipeline combining economic structure with deep learning.
 
 ---
 
@@ -60,8 +60,6 @@ Derived contextual features:
 
 ### 1️⃣ Distance Estimation
 
-Driving duration is converted into distance (km):
-
 $$
 distance = \frac{duration\_seconds}{3600} \times 40
 $$
@@ -83,41 +81,28 @@ Binary variable: `is_peak`.
 
 ### 3️⃣ Weather Simulation
 
-Rain probability is simulated conditionally:
-
 $$
 P(rain) = 0.2 + 0.1 \times is\_peak
 $$
-
-This increases contextual variability during high-demand periods.
 
 ---
 
 ### 4️⃣ Base Pricing Model
 
-Instead of a fixed fee:
-
 $$
 P_{base} = 8 + 0.8 \times distance
 $$
 
-This captures:
-
-- Fixed operational cost (8)  
-- Distance-based marginal cost  
-
 ---
 
 ### 5️⃣ Stochastic Demand Simulation
-
-For each order, multiple counterfactual prices are generated:
 
 $$
 price = P_{base} + \delta
 $$
 
 $$
-\delta \sim U(-0.5 P_{base}, +0.5 P_{base})
+\delta \sim \mathcal{U}(-0.5 P_{base}, +0.5 P_{base})
 $$
 
 Minimum price is constrained to \$2.
@@ -125,8 +110,6 @@ Minimum price is constrained to \$2.
 ---
 
 ### 6️⃣ Nonlinear Price Sensitivity
-
-Elasticity varies by context:
 
 $$
 \alpha(X) =
@@ -137,35 +120,21 @@ $$
 - 0.07 \cdot is\_peak
 $$
 
-This introduces:
-
-- Quadratic distance effects  
-- Distance–weather interaction  
-- Reduced elasticity during peak periods  
-
 ---
 
 ### 7️⃣ Acceptance Probability
-
-First compute:
 
 $$
 z = -\alpha(X)(price - P_{base}) + \epsilon
 $$
 
-Then:
-
 $$
 P(accept) = \sigma(z)
 $$
 
-where:
-
 $$
-\epsilon \sim N(0, 0.5)
+\epsilon \sim \mathcal{N}(0, 0.5)
 $$
-
-This produces a realistic nonlinear demand surface.
 
 ---
 
@@ -176,13 +145,10 @@ This produces a realistic nonlinear demand surface.
 - Baseline comparison  
 
 ### Deep Neural Network
-Architecture:
 - 64 → 32 → 16 hidden units  
 - ReLU activations  
 - Dropout (0.2)  
 - Early stopping  
-
-The DNN captures nonlinear contextual interactions embedded in $\alpha(X)$.
 
 ---
 
@@ -193,13 +159,6 @@ The DNN captures nonlinear contextual interactions embedded in $\alpha(X)$.
 | Logistic Regression | ~0.945 | ~0.091 |
 | Deep Neural Network | ~0.957 | ~0.084 |
 
-### Key Findings
-
-- Deep learning improves discrimination and calibration.
-- Nonlinear modeling enhances revenue optimization.
-- A clear revenue-maximizing price emerges from the model.
-- No significant overfitting observed.
-
 ---
 
 ## 🛠 Engineering Strengths
@@ -207,7 +166,18 @@ The DNN captures nonlinear contextual interactions embedded in $\alpha(X)$.
 - Train/test split performed before price expansion (prevents leakage)
 - Reproducible stochastic simulation
 - Revenue-driven evaluation
-- Clean modular pipeline
+- Modular ML pipeline
+
+---
+
+## 🧰 Tech Stack
+
+- Python 3.10+
+- NumPy
+- Pandas
+- Scikit-learn
+- TensorFlow / Keras
+- Matplotlib
 
 ---
 
