@@ -72,5 +72,4 @@ To estimate $P(accept)$, we combine contextual feature engineering with nonlinea
 
 Then include:
 
-```markdown
 ![ROC Curve](ROC.png)
