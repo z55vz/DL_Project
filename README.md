@@ -73,4 +73,4 @@ To estimate $P(accept)$, we combine contextual feature engineering with nonlinea
 Then include:
 
 ```markdown
-![ROC Curve]("C:\Users\d7d7n\Downloads\ROC.png")
+![ROC Curve]("ROC.png")
