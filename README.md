@@ -1,4 +1,4 @@
-# 🚚 Dynamic Pricing Using Deep Learning
+# Dynamic Pricing Using Deep Learning
 ## Revenue Optimization with Simulated Demand Data
 
 ---
@@ -91,15 +91,18 @@ This generates realistic upward and downward price adjustments while maintaining
 
 ---
 
-###3️⃣ Nonlinear Price Sensitivity
+## 3️⃣ Nonlinear Price Sensitivity
 
 Customer elasticity is modeled as:
 
-α(X) = 0.15  
-   + 0.05 · Distance  
-   + 0.02 · Distance²  
-   + 0.08 · (Distance × Rainy)  
-   − 0.07 · Peak
+$$
+\alpha(X) =
+0.15
++ 0.05 \cdot \text{Distance}
++ 0.02 \cdot \text{Distance}^2
++ 0.08 \cdot (\text{Distance} \cdot \text{Rainy})
+- 0.07 \cdot \text{Peak}
+$$
 
 This structure allows elasticity to vary nonlinearly across contexts.
 
@@ -110,7 +113,11 @@ This structure allows elasticity to vary nonlinearly across contexts.
 Acceptance probability is defined using a logistic function:
 
 $$
-P(\text{Accept}) = \sigma\left( - \alpha(X)\left(\text{Price} - P_{\text{base}}\right) + \varepsilon \right)
+P(\text{Accept}) =
+\sigma\left(
+- \alpha(X)\left(\text{Price} - P_{\text{base}}\right)
++ \varepsilon
+\right)
 $$
 
 where:
@@ -127,7 +134,8 @@ $$
 
 This introduces stochastic behavior consistent with real-world customer uncertainty.
 
-The simulator generates binary acceptance labels, creating a supervised learning dataset.   
+The simulator generates binary acceptance labels, creating a supervised learning dataset.
+
 ---
 
 # 🤖 Model Selection and Justification
@@ -205,3 +213,24 @@ The performance improvement demonstrates that nonlinear modeling better captures
 # 🚀 How to Run
 
 1. Install dependencies:
+
+3. Place `historical_data.csv` inside `/data`
+
+4. Run:
+
+Outputs include:
+
+- ROC curve  
+- Revenue curve  
+- Optimal price estimation  
+
+---
+
+# 🎯 Academic Focus
+
+This project demonstrates:
+
+- Application of Deep Learning to economic decision-making  
+- Handling missing counterfactual outcomes via simulation  
+- Comparison between linear and nonlinear models  
+- Revenue-based evaluation beyond pure classification accuracy  
