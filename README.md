@@ -95,14 +95,11 @@ This generates realistic upward and downward price adjustments while maintaining
 
 Customer elasticity is modeled as:
 
-$$
-\alpha(X) =
-0.15
-+ 0.05 \cdot \text{Distance}
-+ 0.02 \cdot \text{Distance}^2
-+ 0.08 \cdot (\text{Distance} \cdot \text{Rainy})
-- 0.07 \cdot \text{Peak}
-$$
+α(X) = 0.15  
+   + 0.05 · Distance  
+   + 0.02 · Distance²  
+   + 0.08 · (Distance × Rainy)  
+   − 0.07 · Peak  
 
 This structure allows elasticity to vary nonlinearly across contexts.
 
@@ -112,30 +109,19 @@ This structure allows elasticity to vary nonlinearly across contexts.
 
 Acceptance probability is defined using a logistic function:
 
-$$
-P(\text{Accept}) =
-\sigma\left(
-- \alpha(X)\left(\text{Price} - P_{\text{base}}\right)
-+ \varepsilon
-\right)
-$$
+P(Accept) = σ( −α(X)(Price − P_base) + ε )
 
 where:
 
-$$
-\varepsilon \sim \mathcal{N}(0, 0.5)
-$$
+ε ~ N(0, 0.5)
 
 The logistic function is:
 
-$$
-\sigma(z) = \frac{1}{1 + e^{-z}}
-$$
+σ(z) = 1 / (1 + e^(−z))
 
 This introduces stochastic behavior consistent with real-world customer uncertainty.
 
 The simulator generates binary acceptance labels, creating a supervised learning dataset.
-
 ---
 
 # 🤖 Model Selection and Justification
