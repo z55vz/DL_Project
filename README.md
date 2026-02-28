@@ -47,9 +47,11 @@ $$
 
 Customer elasticity is modeled as:
 
-$$
-\alpha(X) = 0.15 + 0.05\,\text{Distance} + 0.02\,\text{Distance}^2 + 0.08\,\text{Distance}\,\text{Rainy} - 0.07\,\text{Peak}
-$$
+α(X) = 0.15  
+   + 0.05 · Distance  
+   + 0.02 · Distance²  
+   + 0.08 · (Distance × Rainy)  
+   − 0.07 · Peak
 ---
 
 ### Acceptance Probability
