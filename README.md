@@ -11,9 +11,9 @@ Using historical delivery data (`historical_data.csv`), we simulate customer pri
 
 The objective of the system is:
 
-\[
-\text{Revenue} = \text{Price} \times P(\text{Accept})
-\]
+$$
+Revenue = Price \times P(Accept)
+$$
 
 Because historical datasets typically contain only observed prices (without alternative price experimentation), we construct a structured simulation framework to generate economically consistent training data.
 
@@ -45,13 +45,15 @@ Without controlled variation in price, a supervised learning model cannot learn 
 
 To address this limitation, we build a **stochastic economic simulator** that expands the dataset.
 
+---
+
 ## 1️⃣ Distance Estimation
 
 Delivery distance is approximated using average speed:
 
-\[
-\text{Distance} = \frac{\text{Duration (seconds)}}{3600} \times 40
-\]
+$$
+Distance = \frac{Duration\ (seconds)}{3600} \times 40
+$$
 
 ---
 
@@ -59,9 +61,9 @@ Delivery distance is approximated using average speed:
 
 A baseline delivery price is defined as:
 
-\[
-P_{\text{base}} = 8 + 0.8 \times \text{Distance}
-\]
+$$
+P_{base} = 8 + 0.8 \times Distance
+$$
 
 ---
 
@@ -69,15 +71,15 @@ P_{\text{base}} = 8 + 0.8 \times \text{Distance}
 
 To simulate alternative pricing scenarios:
 
-\[
-\text{Price} = P_{\text{base}} + \delta
-\]
+$$
+Price = P_{base} + \delta
+$$
 
-where:
+where
 
-\[
-\delta \sim \mathcal{U}(-0.5 P_{\text{base}}, +0.5 P_{\text{base}})
-\]
+$$
+\delta \sim \mathcal{U}(-0.5 P_{base},\ +0.5 P_{base})
+$$
 
 This creates controlled and realistic price experimentation.
 
@@ -87,14 +89,16 @@ This creates controlled and realistic price experimentation.
 
 Customer price sensitivity is modeled as a nonlinear function:
 
-\[
+$$
 \alpha(X) =
 0.15
-+ 0.05 \cdot \text{Distance}
-+ 0.02 \cdot \text{Distance}^2
-+ 0.08 \cdot (\text{Distance} \times \text{Rainy})
-- 0.07 \cdot \text{Peak}
-\]
++ 0.05 \cdot Distance
++ 0.02 \cdot Distance^2
++ 0.08 \cdot (Distance \times Rainy)
+- 0.07 \cdot Peak
+$$
+
+This allows elasticity to vary across delivery conditions.
 
 ---
 
@@ -102,20 +106,20 @@ Customer price sensitivity is modeled as a nonlinear function:
 
 The probability of order acceptance is defined as:
 
-\[
-P(\text{Accept}) =
+$$
+P(Accept) =
 \sigma\left(
--\alpha(X)(\text{Price} - P_{\text{base}}) + \epsilon
+-\alpha(X)(Price - P_{base}) + \epsilon
 \right)
-\]
+$$
 
-where:
+where
 
-\[
+$$
 \epsilon \sim \mathcal{N}(0, 0.5)
-\]
+$$
 
-and \( \sigma(\cdot) \) is the logistic function.
+and $ \sigma(\cdot) $ is the logistic function.
 
 This produces a nonlinear and economically coherent demand surface suitable for supervised learning.
 
@@ -124,6 +128,8 @@ This produces a nonlinear and economically coherent demand surface suitable for 
 # 🤖 Models
 
 Two models are trained and compared.
+
+---
 
 ## 1️⃣ Logistic Regression
 
@@ -151,9 +157,9 @@ Models are evaluated using:
 - Brier Score  
 - Revenue optimization analysis  
 
-The trained model can:
+After training, the system can:
 
-- Predict acceptance probability for any price  
+- Predict acceptance probability for any given price  
 - Generate revenue curves  
 - Identify revenue-maximizing pricing levels  
 
