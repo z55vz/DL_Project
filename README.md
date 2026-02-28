@@ -48,12 +48,7 @@ $$
 Customer elasticity is modeled as:
 
 $$
-\alpha(X) =
-0.15
-+ 0.05 \cdot Distance
-+ 0.02 \cdot Distance^2
-+ 0.08 \cdot (Distance \cdot Rainy)
-- 0.07 \cdot Peak
+\alpha(X) = 0.15 + 0.05 \cdot Distance + 0.02 \cdot Distance^2 + 0.08 \cdot (Distance \cdot Rainy) - 0.07 \cdot Peak
 $$
 ---
 
@@ -89,7 +84,7 @@ The DNN captures complex elasticity patterns and improves predictive accuracy.
 
 ### ROC Curve
 
-![ROC Curve]((images/ROC.png)
+![ROC Curve](images/ROC.png)
 
 The DNN achieves higher AUC compared to Logistic Regression.
 
@@ -97,7 +92,7 @@ The DNN achieves higher AUC compared to Logistic Regression.
 
 ### Example Predictions
 
-![Sample Predictions](images/RANDOM.png)
+![Random Sample](images/RANDOM.png)
 
 The model predicts acceptance probability under different pricing scenarios.
 
