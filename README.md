@@ -55,7 +55,6 @@ $$
 + 0.08 \cdot (Distance \cdot Rainy)
 - 0.07 \cdot Peak
 $$
-
 ---
 
 ### Acceptance Probability
@@ -90,7 +89,7 @@ The DNN captures complex elasticity patterns and improves predictive accuracy.
 
 ### ROC Curve
 
-![ROC Curve](images/roc_curve.png)
+![ROC Curve]((images/ROC.png)
 
 The DNN achieves higher AUC compared to Logistic Regression.
 
@@ -98,7 +97,7 @@ The DNN achieves higher AUC compared to Logistic Regression.
 
 ### Example Predictions
 
-![Sample Predictions](images/random_output.png)
+![Sample Predictions](images/RANDOM.png)
 
 The model predicts acceptance probability under different pricing scenarios.
 
