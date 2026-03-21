@@ -10,6 +10,7 @@ This project builds an **AI system that determines the best delivery price** for
 
 ## 🎯 Objective
 The primary goal is to:
+
 **Maximize Expected Revenue = Price × Probability of Acceptance**
 
 ---
@@ -17,48 +18,54 @@ The primary goal is to:
 ## ⚙️ How the System Works
 
 ### 1. Data Processing
-The system extracts key features to understand the delivery context:
-* **Distance**: Estimated store-to-consumer distance.
-* **Time**: Identification of Peak vs. Off-peak hours.
-* **Base Price**: The starting price used for comparison.
+The system extracts key features:
+* Distance
+* Time (Peak / Off-peak)
+* Base price
 
 ### 2. Market Simulation
-Since real-world historical data often lacks "what-if" scenarios (counterfactuals), a stochastic simulator generates realistic customer responses based on non-linear demand patterns.
+We generate multiple price scenarios to simulate customer behavior.
 
 ### 3. Model Training
-Two models are trained and compared to prove the effectiveness of Deep Learning:
-* **Logistic Regression**: Serves as the statistical baseline.
-* **Deep Neural Network (DNN)**: The main model featuring Batch Normalization and Dropout for optimized performance.
+Two models are used:
+* Logistic Regression (baseline)
+* Deep Neural Network (main model)
 
 ---
 
 ## 📊 Results
 
 ### Model Performance
+
 | Model | ROC-AUC | Brier Score |
 |------|--------|------------|
 | Logistic Regression | ~0.8185 | ~0.1728 |
 | **Deep Neural Network** | **~0.8189** | **~0.1728** |
-*(Note: Results reflect simulated demand experiments)*
 
 ### Revenue Improvement
-The AI system demonstrates a significant improvement in revenue compared to fixed baseline pricing, typically achieving a **~19.86% increase** in optimized scenarios.
+
+The system achieves approximately **~19.86% revenue improvement**.
 
 ---
 
 ## 📈 Visual Results
 
-| ROC Curve | Confusion Matrix |
-|:---:|:---:|
-| ![ROC Curve](Images/لقطة%20شاشة%202026-03-21%20055317.png) | ![Confusion Matrix](Images/لقطة%20شاشة%202026-03-21%20055345.png) |
+### ROC Curve
+![ROC Curve](Images/roc_curve.png)
 
-| Calibration Curve | Revenue Impact |
-|:---:|:---:|
-| ![Calibration Curve](Images/لقطة%20شاشة%202026-03-21%20055359.png) | ![Revenue Impact](Images/لقطة%20شاشة%202026-03-21%20055414.png) |
+### Confusion Matrix
+![Confusion Matrix](Images/confusion_matrix.png)
+
+### Calibration Curve
+![Calibration Curve](Images/calibration_curve.png)
+
+### Revenue Impact
+![Revenue Impact](Images/revenue.png)
 
 ---
 
 ## 📋 Sample Output (Top 10 Optimized Requests)
+
 | distance_km | is_peak | p_base | Optimal_Price | Exp_Revenue | Strategy |
 |-------------|---------|--------|---------------|-------------|----------|
 | 3.484 | 0 | 10.788 | 8.853 | 5.916 | Demand Stimulation |
@@ -76,6 +83,6 @@ The AI system demonstrates a significant improvement in revenue compared to fixe
 
 ## 🚀 How to Run
 
-1. **Install dependencies**:
-   ```bash
-   pip install tensorflow pandas numpy scikit-learn matplotlib seaborn
+1. Install dependencies:
+```bash
+pip install tensorflow pandas numpy scikit-learn matplotlib seaborn
