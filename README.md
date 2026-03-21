@@ -1,70 +1,76 @@
-# AI-Based Dynamic Pricing & Revenue Optimization
-## Utilizing Deep Neural Networks for Context-Aware Demand Modeling
+# AI-Based Dynamic Pricing & Revenue Optimization 🚀
+
+## 🧠 Project Idea
+This project builds an **AI system that determines the best delivery price** for each order. Instead of using a fixed price, the system:
+* Predicts whether a customer will accept a price.
+* Tests multiple price options.
+* Selects the price that maximizes expected revenue.
 
 ---
 
-# 📌 Project Overview
-This project presents a sophisticated **Deep Learning** solution to the dynamic pricing problem in food delivery ecosystems. By integrating historical operational data with stochastic economic simulations, we've developed a system that identifies the revenue-maximizing price for every unique delivery context.
-
-**Optimization Goal:** $$\text{Maximize } \mathbb{E}[\text{Revenue}] = \text{Price} \times P(\text{Acceptance} | \text{Distance, Time, Weather})$$
-
----
-
-# 🧠 Technical Methodology
-
-### 1. High-Performance Deep Learning Pipeline
-The core of this project is a **Deep Neural Network (DNN)** built with TensorFlow, optimized for high-speed inference and training stability:
-* **Batch Normalization (BN):** Implemented after each hidden layer to mitigate internal covariate shift, ensuring stable and faster convergence.
-* **Dropout Regularization (0.3):** Strategic dropout layers are utilized to prevent the model from over-fitting on specific simulated patterns, enhancing generalization.
-* **Vectorized Execution Engine:** The entire simulation and price-grid search are powered by NumPy vectorization, achieving a **100x speedup** compared to standard iterative loops.
-
-
-
-### 2. Stochastic Market Simulation
-To solve the **Missing Potential Outcomes** problem (where historical data only shows one price per order), we engineered a robust simulator:
-* **Non-linear Alpha Function:** We modeled customer price sensitivity ($\alpha$) as a quadratic function of distance, capturing the reality that sensitivity increases non-linearly with delivery cost.
-* **Context Interaction:** The model explicitly accounts for interactions, such as how "Rainy Weather" amplifies the effect of "Distance" on a customer's willingness to pay.
+## 🎯 Objective
+The primary goal is to:
+**Maximize Expected Revenue = Price × Probability of Acceptance**
 
 ---
 
-# 📈 Results & Key Findings
+## ⚙️ How the System Works
 
-### Model Comparison & Validation
-We compared our DNN against a Logistic Regression baseline. The DNN's ability to capture non-linearities resulted in superior probabilistic calibration.
+### 1. Data Processing
+The system extracts key features to understand the delivery context:
+* **Distance**: Estimated store-to-consumer distance.
+* **Time**: Identification of Peak vs. Off-peak hours.
+* **Base Price**: The starting price used for comparison.
 
-| Metric | Logistic Regression | Deep Neural Network |
-| :--- | :--- | :--- |
-| **ROC-AUC** | ~0.942 | **~0.954** |
-| **Brier Score** | ~0.093 | **~0.086** |
+### 2. Market Simulation
+Since real-world historical data often lacks "what-if" scenarios (counterfactuals), a stochastic simulator generates realistic customer responses based on non-linear demand patterns.
 
+### 3. Model Training
+Two models are trained and compared to prove the effectiveness of Deep Learning:
+* **Logistic Regression**: Serves as the statistical baseline.
+* **Deep Neural Network (DNN)**: The main model featuring Batch Normalization and Dropout for optimized performance.
 
-
-### Revenue Impact Analysis
-Our optimization layer performed a grid search across 500+ real-time requests:
-* **Revenue Growth:** The DNN-optimized pricing strategy yielded a **44.47% increase** in average expected revenue compared to the base distance-based pricing.
-* **Elasticity Discovery:** The system revealed that lowering prices slightly below the base rate often leads to a disproportionate jump in acceptance, maximizing total volume and profit.
-
-
-
----
-
-# 🏗 System Workflow
-1. **Context Extraction:** Processing timestamps and durations into peak-hour and distance features.
-2. **Counterfactual Expansion:** Simulating 10+ pricing scenarios per order to train the model on "what if" cases.
-3. **Advanced Training:** Training the DNN with Early Stopping to capture the optimal demand surface.
-4. **Decision Layer:** Executing a real-time price grid search (0.5x to 1.5x of base price) to find the global revenue maximum.
+### 4. Price Optimization
+For each request, the system runs an optimization loop that tests a grid of potential prices and selects the one yielding the highest expected revenue.
 
 ---
 
-# 🚀 Implementation
-1. **Environment:** Python 3.10+, TensorFlow 2.x, Scikit-Learn.
-2. **Setup:** Place `historical_data.csv` in the data directory.
-3. **Run:** Execute the vectorized notebook for immediate results (Optimized for T4 GPU).
+## 📊 Results
+
+### Model Performance
+| Model | ROC-AUC | Brier Score |
+|------|--------|------------|
+| Logistic Regression | ~0.8185 | ~0.17 |
+| **Deep Neural Network** | **~0.8189** | **~0.17** |
+
+### Revenue Improvement
+The AI system demonstrates a significant improvement in revenue compared to fixed baseline pricing, typically achieving a **~19.86% increase** in optimized scenarios.
 
 ---
 
-# 🎯 Academic Focus
-This project demonstrates a mastery of:
-* **Modern DL Regularization:** Proper use of BN and Dropout.
-* **Advanced NumPy:** High-performance vectorized coding.
-* **Economic AI:** Bridging the gap between predictive accuracy (AUC) and business value (Revenue).
+## 📈 Visual Results
+
+| ROC Curve | Confusion Matrix |
+|:---:|:---:|
+| ![ROC Curve](Images/لقطة%20شاشة%202026-03-21%20055317.png) | ![Confusion Matrix](Images/لقطة%20شاشة%202026-03-21%20055345.png) |
+
+| Calibration Curve | Revenue Impact |
+|:---:|:---:|
+| ![Calibration Curve](Images/لقطة%20شاشة%202026-03-21%20055359.png) | ![Revenue Comparison](Images/لقطة%20شاشة%202026-03-21%20055414.png) |
+
+---
+
+## 📋 Sample Output (Top 10 Requests)
+| distance_km | is_peak | p_base | Optimal_Price | Exp_Revenue | Strategy |
+|-------------|---------|--------|---------------|-------------|----------|
+| 3.484 | 0 | 10.788 | 8.853 | 5.916 | Demand Stimulation |
+| 1.484 | 0 | 9.188 | 8.554 | 4.638 | Demand Stimulation |
+| 7.720 | 1 | 14.176 | 11.243 | 9.122 | Demand Stimulation |
+
+---
+
+## 🚀 How to Run
+
+1. **Install dependencies**:
+   ```bash
+   pip install tensorflow pandas numpy scikit-learn matplotlib seaborn
