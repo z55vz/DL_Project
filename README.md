@@ -30,9 +30,6 @@ Two models are trained and compared to prove the effectiveness of Deep Learning:
 * **Logistic Regression**: Serves as the statistical baseline.
 * **Deep Neural Network (DNN)**: The main model featuring Batch Normalization and Dropout for optimized performance.
 
-### 4. Price Optimization
-For each request, the system runs an optimization loop that tests a grid of potential prices and selects the one yielding the highest expected revenue.
-
 ---
 
 ## 📊 Results
@@ -40,8 +37,9 @@ For each request, the system runs an optimization loop that tests a grid of pote
 ### Model Performance
 | Model | ROC-AUC | Brier Score |
 |------|--------|------------|
-| Logistic Regression | ~0.8185 | ~0.17 |
-| **Deep Neural Network** | **~0.8189** | **~0.17** |
+| Logistic Regression | ~0.8185 | ~0.1728 |
+| **Deep Neural Network** | **~0.8189** | **~0.1728** |
+*(Note: Results reflect simulated demand experiments)*
 
 ### Revenue Improvement
 The AI system demonstrates a significant improvement in revenue compared to fixed baseline pricing, typically achieving a **~19.86% increase** in optimized scenarios.
@@ -56,16 +54,23 @@ The AI system demonstrates a significant improvement in revenue compared to fixe
 
 | Calibration Curve | Revenue Impact |
 |:---:|:---:|
-| ![Calibration Curve](Images/لقطة%20شاشة%202026-03-21%20055359.png) | ![Revenue Comparison](Images/لقطة%20شاشة%202026-03-21%20055414.png) |
+| ![Calibration Curve](Images/لقطة%20شاشة%202026-03-21%20055359.png) | ![Revenue Impact](Images/لقطة%20شاشة%202026-03-21%20055414.png) |
 
 ---
 
-## 📋 Sample Output (Top 10 Requests)
+## 📋 Sample Output (Top 10 Optimized Requests)
 | distance_km | is_peak | p_base | Optimal_Price | Exp_Revenue | Strategy |
 |-------------|---------|--------|---------------|-------------|----------|
 | 3.484 | 0 | 10.788 | 8.853 | 5.916 | Demand Stimulation |
 | 1.484 | 0 | 9.188 | 8.554 | 4.638 | Demand Stimulation |
+| 2.276 | 0 | 9.820 | 8.330 | 5.102 | Demand Stimulation |
+| 7.867 | 0 | 14.293 | 11.336 | 9.509 | Demand Stimulation |
+| 5.573 | 0 | 12.459 | 9.881 | 7.586 | Demand Stimulation |
+| 4.729 | 0 | 11.783 | 9.345 | 6.872 | Demand Stimulation |
+| 6.080 | 0 | 12.864 | 10.202 | 8.005 | Demand Stimulation |
 | 7.720 | 1 | 14.176 | 11.243 | 9.122 | Demand Stimulation |
+| 3.076 | 0 | 10.460 | 8.873 | 5.636 | Demand Stimulation |
+| 5.458 | 0 | 12.366 | 9.808 | 7.486 | Demand Stimulation |
 
 ---
 
