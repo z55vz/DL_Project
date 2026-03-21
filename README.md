@@ -51,17 +51,16 @@ The system achieves approximately **~19.86% revenue improvement**.
 ## 📈 Visual Results
 
 ### ROC Curve
-![ROC Curve](Images/roc_curve.png)
+<img src="./Images/roc_curve.png" width="600"/>
 
 ### Confusion Matrix
-![Confusion Matrix](Images/confusion_matrix.png)
+<img src="./Images/confusion_matrix.png" width="600"/>
 
 ### Calibration Curve
-![Calibration Curve](Images/calibration_curve.png)
+<img src="./Images/calibration_curve.png" width="600"/>
 
 ### Revenue Impact
-![Revenue Impact](Images/revenue.png)
-
+<img src="./Images/revenue.png" width="600"/>
 ---
 
 ## 📋 Sample Output (Top 10 Optimized Requests)
