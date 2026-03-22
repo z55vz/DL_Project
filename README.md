@@ -48,29 +48,16 @@ The system achieves approximately **~19.86% revenue improvement**.
 
 ---
 
-### Visual Analytics
-Here are the dynamic pricing strategies and discrimination models in action:
+## 📈 Visual Results
 
-<table style="width:100%">
-  <tr>
-    <th align="center">Discrimination (ROC Curve)</th>
-    <th align="center">Confusion Matrix (Accuracy)</th>
-  </tr>
-  <tr>
-    <td align="center"><img src="Images/لقطة%20شاشة%202026-03-21%20055317.png" alt="ROC Curve: Model Benchmarking" width="400px"/></td>
-    <td align="center"><img src="Images/لقطة%20شاشة%202026-03-21%20055345.png" alt="Confusion Matrix: DNN Precision" width="400px"/></td>
-  </tr>
-  <tr>
-    <th align="center">Calibration Curve (Probability Quality)</th>
-    <th align="center">Business Impact (Revenue Growth)</th>
-  </tr>
-  <tr>
-    <td align="center"><img src="Images/لقطة%20شاشة%202026-03-21%20055359.png" alt="Calibration Curve" width="400px"/></td>
-    <td align="center"><img src="Images/لقطة%20شاشة%202026-03-21%20055414.png" alt="Revenue Optimization Graph" width="400px"/></td>
-  </tr>
-</table>
+| ROC Curve | Confusion Matrix |
+|:---:|:---:|
+| ![ROC Curve](images/roc_curve.png) | ![Confusion Matrix](images/confusion_matrix.png) |
 
-**Note:** Results reflect simulation experiments.
+| Calibration Curve | Revenue Impact |
+|:---:|:---:|
+| ![Calibration Curve](images/calibration_curve.png) | ![Revenue Impact](images/revenue.png) |
+
 ---
 
 ## 📋 Sample Output (Top 10 Optimized Requests)
